@@ -28,6 +28,10 @@ class Slidable extends StatefulWidget {
     this.direction = Axis.horizontal,
     this.dragStartBehavior = DragStartBehavior.down,
     this.useTextDirection = true,
+    this.slideExtentOffsetLeft,
+    this.slideExtentOffsetRight,
+    this.slideExtentOffsetTop,
+    this.slideExtentOffsetBottom,
     required this.child,
   }) : super(key: key);
 
@@ -99,7 +103,11 @@ class Slidable extends StatefulWidget {
   ///
   ///  * [DragGestureRecognizer.dragStartBehavior], which gives an example for the different behaviors.
   final DragStartBehavior dragStartBehavior;
-
+  // You may want to adjust the slide extent to reveal only a portion of the action pane 
+  final double slideExtentOffsetLeft;
+  final double slideExtentOffsetRight;
+  final double slideExtentOffsetTop;
+  final double slideExtentOffsetBottom;
   /// The widget below this widget in the tree.
   ///
   /// {@macro flutter.widgets.ProxyWidget.child}
@@ -261,6 +269,10 @@ class _SlidableState extends State<Slidable>
               clipper: _SlidableClipper(
                 axis: widget.direction,
                 controller: controller,
+                slideExtentOffsetLeft : widget.slideExtentOffsetLeft,
+                slideExtentOffsetRight: widget.slideExtentOffsetRight,
+                slideExtentOffsetTop: widget.slideExtentOffsetTop,
+                slideExtentOffsetBottom : widget.slideExtentOffsetBottom,
               ),
               child: actionPane,
             ),
@@ -319,10 +331,18 @@ class _SlidableClipper extends CustomClipper<Rect> {
   _SlidableClipper({
     required this.axis,
     required this.controller,
+    this.slideExtentOffsetLeft,
+    this.slideExtentOffsetRight,
+    this.slideExtentOffsetTop,
+    this.slideExtentOffsetBottom,
   }) : super(reclip: controller.animation);
 
   final Axis axis;
   final SlidableController controller;
+  final double slideExtentOffsetLeft;
+  final double slideExtentOffsetRight;
+  final double slideExtentOffsetTop;
+  final double slideExtentOffsetBottom;
 
   @override
   Rect getClip(Size size) {
@@ -330,20 +350,20 @@ class _SlidableClipper extends CustomClipper<Rect> {
       case Axis.horizontal:
         final double offset = controller.ratio * size.width;
         if (offset < 0) {
-          return Rect.fromLTRB(size.width + offset, 0, size.width, size.height);
+          return Rect.fromLTRB(size.width + offset - slideExtentOffsetLeft, 0, size.width, size.height);
         }
-        return Rect.fromLTRB(0, 0, offset, size.height);
+        return Rect.fromLTRB(0, 0, offset + slideExtentOffsetRight, size.height);
       case Axis.vertical:
         final double offset = controller.ratio * size.height;
         if (offset < 0) {
           return Rect.fromLTRB(
             0,
-            size.height + offset,
+            size.height + offset - slideExtentOffsetTop,
             size.width,
             size.height,
           );
         }
-        return Rect.fromLTRB(0, 0, size.width, offset);
+        return Rect.fromLTRB(0, 0, size.width, offset + slideExtentOffsetBottom);
     }
   }
 
