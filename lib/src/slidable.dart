@@ -28,10 +28,10 @@ class Slidable extends StatefulWidget {
     this.direction = Axis.horizontal,
     this.dragStartBehavior = DragStartBehavior.down,
     this.useTextDirection = true,
-    this.slideExtentOffsetLeft,
-    this.slideExtentOffsetRight,
-    this.slideExtentOffsetTop,
-    this.slideExtentOffsetBottom,
+    this.slideExtentOffsetLeft = 0,
+    this.slideExtentOffsetRight = 0,
+    this.slideExtentOffsetTop = 0,
+    this.slideExtentOffsetBottom = 0,
     required this.child,
   }) : super(key: key);
 
@@ -331,10 +331,10 @@ class _SlidableClipper extends CustomClipper<Rect> {
   _SlidableClipper({
     required this.axis,
     required this.controller,
-    this.slideExtentOffsetLeft,
-    this.slideExtentOffsetRight,
-    this.slideExtentOffsetTop,
-    this.slideExtentOffsetBottom,
+    this.slideExtentOffsetLeft = 0,
+    this.slideExtentOffsetRight = 0,
+    this.slideExtentOffsetTop = 0,
+    this.slideExtentOffsetBottom = 0,
   }) : super(reclip: controller.animation);
 
   final Axis axis;
