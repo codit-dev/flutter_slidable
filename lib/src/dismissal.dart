@@ -92,9 +92,15 @@ class _SlidableDismissalState extends State<SlidableDismissal>
       }());
     }
 
-    return _SizeTransition(
-      sizeFactor: resizeAnimation,
-      axis: widget.axis,
+    late Tween<Offset> slideTween;
+    final actionPaneType = widget.controller.direction.actionPaneType.value;
+
+    slideTween = actionPaneType == ActionPaneType.start
+        ? Tween(begin: const Offset(0, 0), end: const Offset(1.05, 0))
+        : Tween(begin: const Offset(0, 0), end: const Offset(-1.05, 0));
+
+    return SlideTransition(
+      position: slideTween.animate(CurvedAnimation(parent: animationController, curve: Curves.easeOutExpo)),
       child: widget.child,
     );
   }
