@@ -93,7 +93,7 @@ class _SlidableDismissalState extends State<SlidableDismissal>
     }
 
     late Tween<Offset> slideTween;
-    final actionPaneType = widget.controller.direction.actionPaneType.value;
+    final actionPaneType = widget.controller.actionPaneType.value;
 
     slideTween = actionPaneType == ActionPaneType.start
         ? Tween(begin: const Offset(0, 0), end: const Offset(1.05, 0))
